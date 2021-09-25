@@ -10,6 +10,7 @@ import SwiftUI
 public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
     
     @ObservedObject public var customAlertManager: CustomAlertManager
+    public var widthFactor: CGFloat?
     public var alertContent: () -> AlertContent
     public var buttons: [CustomAlertButton]
     
@@ -21,35 +22,37 @@ public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
     public func body(content: Content) -> some View {
         ZStack {
             content.disabled(customAlertManager.isPresented)
-            if customAlertManager.isPresented {
-                GeometryReader { geometry in
-                    Color(.systemBackground)
-                        .colorInvert()
-                        .opacity(0.2)
-                        .ignoresSafeArea()
-                    HStack {
+            GeometryReader { geometry in
+                Color(.systemBackground).opacity(0.2).ignoresSafeArea()
+                    .onTapGesture {
+                        customAlertManager.isPresented.toggle()
+                    }
+                HStack {
+                    Spacer()
+                    VStack {
+                        let expectedWidth = widthFactor != nil
+                        ? geometry.size.width * 0.7 * widthFactor!
+                        : geometry.size.width * 0.7
+
                         Spacer()
-                        VStack {
-                            let expectedWidth = geometry.size.width * 0.7
-                            
-                            Spacer()
-                            VStack(spacing: 0) {
-                                alertContent().padding()
-                                buttonsPad(expectedWidth)
-                            }
-                            .frame(
-                                minWidth: expectedWidth,
-                                maxWidth: expectedWidth
-                            )
-                            .background(Color(.systemBackground).opacity(0.95))
-                            .cornerRadius(13)
-                            Spacer()
+                        VStack(spacing: 0) {
+                            alertContent().padding()
+                            buttonsPad(expectedWidth)
                         }
+                        .frame(
+                            minWidth: expectedWidth,
+                            maxWidth: expectedWidth
+                        )
+                        .background(.thinMaterial)
+                        .cornerRadius(13)
                         Spacer()
                     }
-                    
+                    Spacer()
                 }
+
             }
+            .opacity(customAlertManager.isPresented ? 1 : 0)
+
             
         }
     }
