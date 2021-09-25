@@ -25,7 +25,9 @@ public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
             GeometryReader { geometry in
                 Color(.systemBackground).opacity(0.2).ignoresSafeArea()
                     .onTapGesture {
-                        customAlertManager.isPresented.toggle()
+                        withAnimation {
+                            customAlertManager.isPresented.toggle()
+                        }
                     }
                 HStack {
                     Spacer()
