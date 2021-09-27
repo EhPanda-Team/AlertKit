@@ -46,7 +46,7 @@ public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
                             minWidth: expectedWidth,
                             maxWidth: expectedWidth
                         )
-                        .background(.thinMaterial)
+                        .background(.regularMaterial)
                         .cornerRadius(13)
                         Spacer()
                     }
