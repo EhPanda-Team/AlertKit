@@ -11,6 +11,7 @@ public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
     
     @ObservedObject public var customAlertManager: CustomAlertManager
     public var widthFactor: CGFloat?
+    public var backgroundOpacity: CGFloat?
     public var alertContent: () -> AlertContent
     public var buttons: [CustomAlertButton]
     
@@ -23,8 +24,8 @@ public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
         ZStack {
             content.disabled(customAlertManager.isPresented)
             GeometryReader { geometry in
-                Color(.systemBackground).opacity(0.2).ignoresSafeArea()
-                    .onTapGesture {
+                Color.black.opacity(backgroundOpacity ?? 0.2)
+                    .ignoresSafeArea().onTapGesture {
                         withAnimation {
                             customAlertManager.isPresented.toggle()
                         }
