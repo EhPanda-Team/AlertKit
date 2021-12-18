@@ -102,9 +102,10 @@ public struct CustomAlertViewModifier<AlertContent: View>: ViewModifier {
         
         HStack(spacing: 0) {
             let sidesOffset: CGFloat = 12 * 2
-            let maxHorizontalWidth = requireHorizontalPositioning ?
+            var maxHorizontalWidth = requireHorizontalPositioning ?
                 expectedWidth - sidesOffset :
                 expectedWidth / 2 - sidesOffset
+            maxHorizontalWidth = max(maxHorizontalWidth, 0)
             
             Spacer()
             
